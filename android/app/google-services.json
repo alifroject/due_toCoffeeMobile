@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "590166912194",
+    "firebase_url": "https://trash-scantalk-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "trash-scantalk",
+    "storage_bucket": "trash-scantalk.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590166912194:android:c73c30694b3d77c6695f5b",
+        "android_client_info": {
+          "package_name": "com.example.due_tocoffee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "590166912194-vflgjtr60prqspthqkbo9msu9adi8im5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzOcxcJWkUvGomLX4ZOdZFr1FOswXBPMI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "590166912194-vflgjtr60prqspthqkbo9msu9adi8im5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590166912194:android:8d0b146d2cf62087695f5b",
+        "android_client_info": {
+          "package_name": "com.example.duetocoffee2026"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "590166912194-vflgjtr60prqspthqkbo9msu9adi8im5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzOcxcJWkUvGomLX4ZOdZFr1FOswXBPMI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "590166912194-vflgjtr60prqspthqkbo9msu9adi8im5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,39 @@
+
+buildscript {
+     ext.kotlin_version = '1.9.22'
+
+// The last of the 1.x series — should support 2.1.0 compiled libraries
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2' // or any lower version
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.4.1'
+  
+    }
+    ext {
+        tflite_flutter_namespace = "sq.flutter.tflite"  // ← Add this
+    }
+    
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
