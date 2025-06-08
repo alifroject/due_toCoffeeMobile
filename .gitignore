@@ -1,3 +1,5 @@
+# Hide .env
+.env
 # Miscellaneous
 *.class
 *.log
