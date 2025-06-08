@@ -58,14 +58,4 @@ flutter:
   assets:
     - assets/images/military.jpg
     - assets/images/coffee_Logo.png
-    - assets/mobilenetv3_model.tflite
-    - assets/mobilenetv3_keras.tflite
-    - assets/vgg16_optimized.tflite
-    - assets/mobilenetv3_waste_classifier.tflite
-    - assets/yolov8n_float32.tflite
-    - assets/MobileNet-v3-Large.tflite
-    - assets/mobilenetv3_trash_model.tflite
-    - assets/1.tflite
-    - assets/mobilenetv3_flex.tflite
-    - assets/trash_labels.txt
-   
+  
