@@ -19,15 +19,16 @@ class _EntryPointState extends State<EntryPoint> {
 
   final List<Widget> _pages = [
     CoffeeShopHome(),
-    CartPage(),
-    FoodOrderStatusList(),
+    FoodOrderMainPage(),
     ProfilePage(),
   ];
 
   // ADDED: Variables to store queue info
   List<String> _userQueueNumbers = [];
   bool _isLoadingQueue = true;
-
+  // NEW: Cart item count
+  int _cartItemCount = 0;
+  Stream<DocumentSnapshot>? _cartStream;
   @override
   void initState() {
     super.initState();
@@ -35,6 +36,31 @@ class _EntryPointState extends State<EntryPoint> {
     _navigationHistory.add(_currentIndex);
     _setupNotificationListeners();
     _fetchUserQueues(); // ADDED: fetch queue numbers on init
+    _listenToCartChanges(); // <-- start listening to cart changes here
+  }
+
+  void _listenToCartChanges() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    _cartStream = FirebaseFirestore.instance
+        .collection('carts')
+        .doc(user.uid)
+        .snapshots();
+
+    _cartStream?.listen((snapshot) {
+      if (snapshot.exists) {
+        final data = snapshot.data() as Map<String, dynamic>;
+        final List<dynamic> items = data['items'] ?? [];
+        setState(() {
+          _cartItemCount = items.length;
+        });
+      } else {
+        setState(() {
+          _cartItemCount = 0;
+        });
+      }
+    });
   }
 
   void _onTabTapped(int index) {
@@ -336,9 +362,9 @@ class _EntryPointState extends State<EntryPoint> {
           selectedItemColor: Colors.blue,
           unselectedItemColor: Colors.grey,
           type: BottomNavigationBarType.fixed,
-          items: const [
+          items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-            BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: ""),
+           
             BottomNavigationBarItem(icon: Icon(Icons.message), label: ""),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
           ],

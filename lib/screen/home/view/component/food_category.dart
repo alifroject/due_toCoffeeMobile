@@ -98,17 +98,7 @@ class FoodCategory extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        description,
-                        style: TextStyle(
-                          fontFamily: 'Arial',
-                          color: Colors.grey[600],
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
+                    
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

@@ -42,7 +42,7 @@ class PastryDetailPage extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: const Text('Detail Produk'),
-            backgroundColor: Colors.green,
+            backgroundColor: const Color.fromARGB(255, 164, 99, 1),
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),

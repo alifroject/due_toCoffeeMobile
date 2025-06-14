@@ -41,7 +41,7 @@ class CoffeeCategory extends StatelessWidget {
                 final imageUrl = data['imageUrl'] ?? '';
                 final name = data['name'] ?? 'No name';
                 final price = data['price'] ?? 0;
-                final description = data['description'] ?? '';
+            
                 final priceFormatted = NumberFormat.currency(
                   locale: 'id_ID',
                   symbol: 'Rp ',
@@ -52,7 +52,8 @@ class CoffeeCategory extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CoffeeDetailPage(productId: doc.id),
+                        builder: (context) =>
+                            CoffeeDetailPage(productId: doc.id),
                       ),
                     );
                   },
@@ -82,7 +83,8 @@ class CoffeeCategory extends StatelessWidget {
                             fit: BoxFit.cover,
                             height: itemHeight * 0.45, // 45% of the item height
                             width: double.infinity,
-                            errorBuilder: (context, error, stackTrace) => Container(
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
                               height: itemHeight * 0.45,
                               color: Colors.grey[200],
                               child: const Icon(Icons.broken_image),
@@ -101,19 +103,8 @@ class CoffeeCategory extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            description,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        const Spacer(),
+                        
+                       
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
@@ -129,7 +120,15 @@ class CoffeeCategory extends StatelessWidget {
                               ),
                               IconButton(
                                 icon: const Icon(Icons.shopping_cart),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          CoffeeDetailPage(productId: doc.id),
+                                    ),
+                                  );
+                                },
                                 color: Colors.blue,
                                 iconSize: 20,
                                 padding: EdgeInsets.zero,

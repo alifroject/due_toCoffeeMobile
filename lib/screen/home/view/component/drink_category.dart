@@ -36,7 +36,7 @@ class DrinkCategory extends StatelessWidget {
               final imageUrl = data['imageUrl'] ?? '';
               final name = data['name'] ?? 'No name';
               final price = data['price'] ?? 0;
-              final description = data['description'] ?? '';
+            
 
               final priceFormatted = NumberFormat.currency(
                 locale: 'id_ID',
@@ -93,17 +93,7 @@ class DrinkCategory extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                          description,
-                          style: TextStyle(
-                            fontFamily: 'Arial',
-                            color: Colors.grey[600],
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
+                    
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),

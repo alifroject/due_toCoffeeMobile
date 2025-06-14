@@ -2,16 +2,9 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import axios from 'axios';
 import { onDocumentUpdated } from 'firebase-functions/v2/firestore';
-import * as dotenv from 'dotenv';
-dotenv.config();
+
 admin.initializeApp();
 
-const MIDTRANS_SERVER_KEY = process.env.MIDTRANS_SERVER_KEY;
-const MIDTRANS_API_URL = process.env.MIDTRANS_API_URL || 'https://api.sandbox.midtrans.com/v2';
-const MIDTRANS_SNAP_URL = process.env.MIDTRANS_SNAP_URL || 'https://app.sandbox.midtrans.com/snap/v1/transactions';
-
-const XENDIT_API_KEY = process.env.XENDIT_API_KEY || '';
-const XENDIT_API_URL = process.env.XENDIT_API_URL || 'https://api.xendit.co/v2/invoices';
 
 interface XenditInvoiceResponse {
   id: string;

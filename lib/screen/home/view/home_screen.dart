@@ -3,7 +3,10 @@ import 'package:due_tocoffee/screen/home/view/component/coffee_category.dart';
 import 'package:due_tocoffee/screen/home/view/component/drink_category.dart';
 import 'package:due_tocoffee/screen/home/view/component/pastry_category.dart';
 import 'package:due_tocoffee/screen/home/view/component/food_category.dart';
-
+import 'package:due_tocoffee/routes/screen_export.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
 
 class CoffeeShopHome extends StatefulWidget {
   const CoffeeShopHome({super.key});
@@ -16,6 +19,44 @@ class _CoffeeShopHomeState extends State<CoffeeShopHome> {
   int _selectedCategory = 0;
   final List<String> categories = ['Coffee', 'Drinks', 'Pastries', 'Food'];
 
+  int _cartItemCount = 0;
+  StreamSubscription<DocumentSnapshot>? _cartSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _listenToCartChanges();
+  }
+
+  void _listenToCartChanges() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    _cartSubscription = FirebaseFirestore.instance
+        .collection('carts')
+        .doc(user.uid)
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.exists) {
+        final data = snapshot.data() as Map<String, dynamic>;
+        final List<dynamic> items = data['items'] ?? [];
+        setState(() {
+          _cartItemCount = items.length;
+        });
+      } else {
+        setState(() {
+          _cartItemCount = 0;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _cartSubscription?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +64,7 @@ class _CoffeeShopHomeState extends State<CoffeeShopHome> {
         children: [
           // Header Section
           Container(
-            height: 200,
+            height: 120,
             decoration: BoxDecoration(
               color: const Color(0xFF210F0F),
               borderRadius: const BorderRadius.only(
@@ -38,29 +79,62 @@ class _CoffeeShopHomeState extends State<CoffeeShopHome> {
                 ),
               ],
             ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'IT\'S OUR THEME',
-                    style: TextStyle(
-                      color: const Color(0xFFDAC5C5),
-                      fontSize: 24,
-                      fontFamily: 'Inika',
-                    ),
-                  ),
-                  Text(
-                    'WELCOME TO COFFEE SHOP',
-                    style: TextStyle(
-                      color: const Color(0xFFDAC5C5),
-                      fontSize: 24,
+            child: Stack(
+              children: [
+                Center(
+                  child: Text(
+                    'DUE TO COFFEE',
+                    style: const TextStyle(
+                      color: Color(0xFFDAC5C5),
+                      fontSize: 26,
                       fontFamily: 'Inika',
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ],
-              ),
+                ),
+                Positioned(
+                  top: 60,
+                  right: 20,
+                  child: Stack(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.shopping_cart),
+                        color: Color.fromARGB(255, 219, 212, 212),
+                        iconSize: 30,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CartPage()),
+                          );
+                        },
+                      ),
+                      if (_cartItemCount > 0)
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            constraints: BoxConstraints(minWidth: 20, minHeight: 20),
+                            child: Center(
+                              child: Text(
+                                '$_cartItemCount',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
 
@@ -68,7 +142,7 @@ class _CoffeeShopHomeState extends State<CoffeeShopHome> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             child: SizedBox(
-              height: 50,
+              height: 40,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: categories.length,
@@ -111,7 +185,7 @@ class _CoffeeShopHomeState extends State<CoffeeShopHome> {
                     ),
                   ],
                 ),
-                child: _getSelectedCategoryWidget(), // Dynamically load content here
+                child: _getSelectedCategoryWidget(),
               ),
             ),
           ),
@@ -120,28 +194,16 @@ class _CoffeeShopHomeState extends State<CoffeeShopHome> {
     );
   }
 
-  // Get the category icon for the selected category
-  IconData _getCategoryIcon() {
-    switch (_selectedCategory) {
-      case 0: return Icons.coffee;
-      case 1: return Icons.local_drink;
-      case 2: return Icons.cake;
-      case 3: return Icons.fastfood;
-      default: return Icons.coffee;
-    }
-  }
-
-  // Get the widget for the selected category
   Widget _getSelectedCategoryWidget() {
     switch (_selectedCategory) {
       case 0:
-        return const CoffeeCategory(); // Display the CoffeeCategory widget for Coffee
+        return const CoffeeCategory();
       case 1:
-        return const DrinkCategory(); // Placeholder for Drinks
+        return const DrinkCategory();
       case 2:
-        return const PastryCategory(); // Placeholder for Pastries
+        return const PastryCategory();
       case 3:
-        return const FoodCategory(); // Placeholder for Food
+        return const FoodCategory();
       default:
         return const Center(child: Text('Select a category to view items.'));
     }

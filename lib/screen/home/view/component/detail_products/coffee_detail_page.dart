@@ -44,46 +44,152 @@ class _CoffeeDetailPageState extends State<CoffeeDetailPage> {
 
     final userId = user.uid;
     final cartRef = FirebaseFirestore.instance.collection('carts').doc(userId);
-    final cartSnapshot = await cartRef.get();
 
-    final newItem = {
-      'productId': widget.productId,
-      'name': coffeeData['name'],
-      'price': coffeeData['price'],
-      'quantity': 1,
-      'imageUrl': coffeeData['imageUrl'] ?? '',
-      'type': selectedOption, // Hot or Ice
-    };
+    bool itemAlreadyInCart = false;
 
-    if (cartSnapshot.exists) {
-      final List<dynamic> items = cartSnapshot.data()?['items'] ?? [];
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      final snapshot = await transaction.get(cartRef);
 
-      final index = items.indexWhere((item) =>
-          item['productId'] == widget.productId &&
-          item['type'] == selectedOption);
+      if (!snapshot.exists) {
+        // Cart not exists — create new one
+        final newItem = {
+          'productId': widget.productId,
+          'name': coffeeData['name'],
+          'basePrice': coffeeData['price'],
+          'price': coffeeData['price'],
+          'quantity': 1,
+          'imageUrl': coffeeData['imageUrl'] ?? '',
+          'type': selectedOption,
+        };
 
-      if (index >= 0) {
-        items[index]['quantity'] += 1;
+        transaction.set(cartRef, {
+          'userId': userId,
+          'items': [newItem],
+          'totalQuantity': 1,
+          'totalPrice': coffeeData['price'],
+          'status': 'pending',
+          'createdAt': FieldValue.serverTimestamp(),
+        });
       } else {
+        final data = snapshot.data() as Map<String, dynamic>;
+        List<dynamic> items = data['items'] ?? [];
+
+        final index = items.indexWhere((item) =>
+            item['productId'] == widget.productId &&
+            item['type'] == selectedOption);
+
+        if (index >= 0) {
+          // Already exists
+          itemAlreadyInCart = true;
+          return;
+        }
+
+        // Add new item
+        final newItem = {
+          'productId': widget.productId,
+          'name': coffeeData['name'],
+          'price': coffeeData['price'],
+          'quantity': 1,
+          'imageUrl': coffeeData['imageUrl'] ?? '',
+          'type': selectedOption,
+        };
         items.add(newItem);
+
+        // Recalculate totals
+        int totalQuantity = 0;
+        double totalPrice = 0;
+
+        for (var item in items) {
+          final itemQuantity = ((item['quantity'] ?? 0) as num).toInt();
+          final itemPrice = (item['price'] ?? 0).toDouble();
+
+          totalQuantity += itemQuantity;
+          totalPrice += itemQuantity * itemPrice;
+        }
+
+        transaction.update(cartRef, {
+          'items': items,
+          'totalQuantity': totalQuantity,
+          'totalPrice': totalPrice,
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
       }
+    });
 
-      await cartRef.update({
-        'items': items,
-        'updatedAt': FieldValue.serverTimestamp(),
-      });
+    // after transaction
+    if (itemAlreadyInCart) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.of(context).pop();
+          });
+
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.shopping_cart,
+                  color: Colors.orange,
+                  size: 48,
+                ),
+                SizedBox(height: 16),
+                const Text(
+                  'Produk sudah ada di keranjang',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
     } else {
-      await cartRef.set({
-        'userId': userId,
-        'items': [newItem],
-        'status': 'pending',
-        'createdAt': FieldValue.serverTimestamp(),
-      });
-    }
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.of(context).pop();
+          });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Produk berhasil ditambahkan ke keranjang')),
-    );
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: Colors.green,
+                  size: 48,
+                ),
+                SizedBox(height: 16),
+                const Text(
+                  'Produk berhasil ditambahkan ke keranjang',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -117,55 +223,68 @@ class _CoffeeDetailPageState extends State<CoffeeDetailPage> {
             title: Text(name),
             backgroundColor: Colors.brown[700],
           ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.network(
-                    imageUrl,
-                    width: double.infinity,
-                    height: 240,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(name,
-                    style: const TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5)),
-                const SizedBox(height: 4),
-                Text(priceFormatted,
-                    style: TextStyle(fontSize: 18, color: Colors.green[800])),
-                const SizedBox(height: 12),
-                Text(description,
-                    style: const TextStyle(fontSize: 14, color: Colors.black87)),
-                const Divider(height: 32, thickness: 1),
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.network(
+                        imageUrl,
+                        width: double.infinity,
+                        height: 240,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(name,
+                        style: const TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5)),
+                    const SizedBox(height: 4),
+                    Text(priceFormatted,
+                        style:
+                            TextStyle(fontSize: 18, color: Colors.green[800])),
+                    const SizedBox(height: 12),
+                    Text(description,
+                        style: const TextStyle(
+                            fontSize: 14, color: Colors.black87)),
+                    const Divider(height: 32, thickness: 1),
 
-                // Type Selector
-                const Text("Tipe Minuman:",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                DropdownButton<String>(
-                  value: selectedOption,
-                  items: ['Hot', 'Ice'].map((type) {
-                    return DropdownMenuItem(
-                      value: type,
-                      child: Text(type),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedOption = value;
-                    });
-                  },
+                    const Text("Tipe Minuman:",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    DropdownButton<String>(
+                      value: selectedOption,
+                      items: ['Hot', 'Ice'].map((type) {
+                        return DropdownMenuItem(
+                          value: type,
+                          child: Text(type),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedOption = value;
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                        height: 100), // add extra space for the button
+                  ],
                 ),
-
-                const SizedBox(height: 32),
-                Center(
+              ),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.all(16),
                   child: ElevatedButton.icon(
                     onPressed: () => addToCart(data),
                     icon: const Icon(Icons.shopping_cart, color: Colors.white),
@@ -181,8 +300,8 @@ class _CoffeeDetailPageState extends State<CoffeeDetailPage> {
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },

@@ -6,7 +6,7 @@ export 'package:due_tocoffee/screen/track/view/component/trash_info_card.dart';
 export 'package:due_tocoffee/screen/chat/view/chat_screen.dart';
 export 'package:due_tocoffee/screen/home/view/component/grid_item.dart';
 export 'package:due_tocoffee/screen/home/view/component/scan_button.dart';
-export 'package:due_tocoffee/screen/search/view/order_status.dart';
+export 'package:due_tocoffee/screen/search/view/food_order_main_page.dart';
 export 'package:due_tocoffee/screen/profile/view/widgets/navigation.dart';
 export 'package:due_tocoffee/screen/profile/view/widgets/profile_avatar.dart';
 export 'package:due_tocoffee/screen/profile/view/widgets/status_bar.dart';
