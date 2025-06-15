@@ -60,4 +60,6 @@ flutter:
   assets:
     - assets/images/military.jpg
     - assets/images/coffee_Logo.png
+    - assets/images/onboardingLogo.png
+
   

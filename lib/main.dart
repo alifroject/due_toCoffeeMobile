@@ -6,7 +6,6 @@ import 'package:due_tocoffee/theme/app_theme.dart';
 import 'package:due_tocoffee/routes/route.dart';
 import 'package:due_tocoffee/routes/route_constants.dart';
 import 'package:due_tocoffee/routes/screen_export.dart';
-
 import 'package:due_tocoffee/notification_service.dart';
 
 void main() async {
@@ -26,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Shop Template by The Flutter Way',
+      title: 'Due To Coffee',
       theme: AppTheme.lightTheme(context),
       themeMode: ThemeMode.light,
       onGenerateRoute: AppRouter.generateRoute,
@@ -34,12 +33,15 @@ class MyApp extends StatelessWidget {
         '/entry': (context) => EntryPoint(),
         '/orderPayments': (context) => const UserTransactionsPage(),
       },
-      home: AuthChecker(),
+      home: const OnboardingScreen(), // 👉 Load external onboarding screen
     );
   }
 }
 
+// ✅ AuthChecker stays exactly the same
 class AuthChecker extends StatelessWidget {
+  const AuthChecker({super.key});
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -50,7 +52,6 @@ class AuthChecker extends StatelessWidget {
         }
 
         if (snapshot.hasData && snapshot.data != null) {
-          // 🔥 Check FCM intent when app starts
           return FutureBuilder<RemoteMessage?>(
             future: FirebaseMessaging.instance.getInitialMessage(),
             builder: (context, snapshot) {
