@@ -8,21 +8,21 @@ class LanguagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('choose_language'.tr()), 
+        title: Text('choose_language'.tr()),
         backgroundColor: Colors.brown,
       ),
       body: ListView(
         children: [
           ListTile(
             title: const Text('English'),
-            onTap: () {
-              context.setLocale(const Locale('en', 'US'));
+            onTap: () async {
+              await context.setLocale(const Locale('en', 'US'));
             },
           ),
           ListTile(
             title: const Text('Bahasa Indonesia'),
-            onTap: () {
-              context.setLocale(const Locale('id', 'ID'));
+            onTap: () async {
+              await context.setLocale(const Locale('id', 'ID'));
             },
           ),
         ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:due_tocoffee/routes/screen_export.dart';
 import 'logout_util.dart';
 import 'component/language_page.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -109,31 +110,30 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // Replace _buildDividers() with this:
   List<Widget> _buildUserBarList(BuildContext context) {
     return [
-      BarListUser(
-        title: "My Order Payments",
+      ListTile(
+        title: Text("my_order_payments".tr()),
         onTap: () => Navigator.pushNamed(context, '/orderPayments'),
       ),
-      BarListUser(
-        title: "Settings",
+      ListTile(
+        title: Text("settings".tr()),
         onTap: () => Navigator.pushNamed(context, '/settings'),
       ),
-      BarListUser(
-        title: "Choose The Language",
+      ListTile(
+        title: Text("choose_language".tr()),
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const LanguagePage()),
         ),
       ),
-      BarListUser(
-        title: "Help & Support",
+      ListTile(
+        title: Text("help_support".tr()),
         onTap: () => Navigator.pushNamed(context, '/support'),
       ),
-      BarListUser(
-        title: "Logout",
-        onTap: () => showLogoutConfirmation(context), // 👈 Use the new function
+      ListTile(
+        title: Text("logout".tr()),
+        onTap: () => showLogoutConfirmation(context),
       ),
     ];
   }

@@ -7,24 +7,35 @@ import 'package:due_tocoffee/routes/route.dart';
 import 'package:due_tocoffee/routes/route_constants.dart';
 import 'package:due_tocoffee/routes/screen_export.dart';
 import 'package:due_tocoffee/notification_service.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // 👈 ADD THIS
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
   await FirebaseMessaging.instance.requestPermission();
   await setupFlutterNotifications();
 
-  runApp(const MyApp());
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('id', 'ID'),
+      ],
+      path: 'assets/translations',
+      fallbackLocale: Locale('en', 'US'),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  Future<Widget> getInitialScreen() async {
+  Future<Widget> _getInitialScreen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isOnboardingDone = prefs.getBool('onboarding_done') ?? false;
-
     if (!isOnboardingDone) {
       return const OnboardingScreen();
     } else {
@@ -34,30 +45,33 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Widget>(
-      future: getInitialScreen(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Due To Coffee',
-          theme: AppTheme.lightTheme(context),
-          themeMode: ThemeMode.light,
-          onGenerateRoute: AppRouter.generateRoute,
-          routes: {
-            '/entry': (context) => EntryPoint(),
-            '/orderPayments': (context) => const UserTransactionsPage(),
-          },
-          home: snapshot.data,
-        );
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Due To Coffee',
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      theme: AppTheme.lightTheme(context),
+      themeMode: ThemeMode.light,
+      onGenerateRoute: AppRouter.generateRoute,
+      routes: {
+        '/entry': (context) => EntryPoint(),
+        '/orderPayments': (context) => const UserTransactionsPage(),
       },
+      home: FutureBuilder<Widget>(
+        future: _getInitialScreen(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return snapshot.data!;
+        },
+      ),
     );
   }
 }
 
-// OnboardingScreen - stays almost same, but after onboarding mark as done
+// ✅ Onboarding screen
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -110,7 +124,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               SizedBox(
                 width: 150,
                 height: 150,
-                child: Image.asset("assets/images/onboardingLogo.png", fit: BoxFit.contain),
+                child: Image.asset("assets/images/onboardingLogo.png",
+                    fit: BoxFit.contain),
               ),
               const SizedBox(height: 30),
               const Text(
@@ -142,7 +157,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 }
 
-// Your AuthChecker is 100% kept as is:
+// ✅ AuthChecker remains same (perfect separation)
 class AuthChecker extends StatelessWidget {
   const AuthChecker({super.key});
 
@@ -164,7 +179,10 @@ class AuthChecker extends StatelessWidget {
               }
 
               final message = snapshot.data;
-              final int initialTab = (message != null && message.data['action'] == 'open_order_status') ? 2 : 0;
+              final int initialTab = (message != null &&
+                      message.data['action'] == 'open_order_status')
+                  ? 2
+                  : 0;
               return EntryPoint(initialTab: initialTab);
             },
           );
