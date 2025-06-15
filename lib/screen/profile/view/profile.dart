@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:due_tocoffee/routes/screen_export.dart';
 import 'logout_util.dart';
+import 'component/language_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -118,6 +119,13 @@ class ProfilePage extends StatelessWidget {
       BarListUser(
         title: "Settings",
         onTap: () => Navigator.pushNamed(context, '/settings'),
+      ),
+      BarListUser(
+        title: "Choose The Language",
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const LanguagePage()),
+        ),
       ),
       BarListUser(
         title: "Help & Support",

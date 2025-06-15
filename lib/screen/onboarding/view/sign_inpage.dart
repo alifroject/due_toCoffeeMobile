@@ -85,8 +85,9 @@ class SignInPage extends StatelessWidget {
               ElevatedButton.icon(
                 icon: const FaIcon(FontAwesomeIcons.google, color: Colors.white), // Google Icon
                 label: const Text(
+                  
                   'Sign in with Google',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF4285F4), // Google Blue
