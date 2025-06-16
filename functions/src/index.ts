@@ -6,7 +6,6 @@ import { onDocumentUpdated } from 'firebase-functions/v2/firestore';
 admin.initializeApp();
 
 
-
 interface XenditInvoiceResponse {
   id: string;
   invoice_url: string;

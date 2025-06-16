@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'transaction_detail_page.dart';
 import './components/food_waste_main.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class FoodOrderStatusList extends StatefulWidget {
   const FoodOrderStatusList({super.key});
@@ -173,7 +174,7 @@ class _FoodOrderStatusListState extends State<FoodOrderStatusList> {
                 children: [
                   Column(
                     children: [
-                      const Text("Picked Up",
+                      Text("picked_up".tr(),
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 8),
@@ -193,7 +194,7 @@ class _FoodOrderStatusListState extends State<FoodOrderStatusList> {
                   ),
                   Column(
                     children: [
-                      const Text("Expired",
+                      Text("expired".tr(),
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 8),
@@ -212,10 +213,9 @@ class _FoodOrderStatusListState extends State<FoodOrderStatusList> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "Waste Food Overview",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                  Text("waste_food_overview".tr(),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   IconButton(
                     icon: Icon(
                       _showParagraph
@@ -232,15 +232,10 @@ class _FoodOrderStatusListState extends State<FoodOrderStatusList> {
                 ],
               ),
               if (_showParagraph) ...[
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 4.0),
-                  child: Text(
-                    "The graph below visualizes waste food data based on picked up and expired orders. "
-                    "Expired represents uncollected orders that may contribute to potential food waste. "
-                    "You can explore more details about food waste trends, data analysis, and management efforts. "
-                    "For further insights, you can reference more...",
-                    style: TextStyle(fontSize: 14),
-                  ),
+                  child: Text("waste_food_paragraph".tr(),
+                      style: TextStyle(fontSize: 14)),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
@@ -252,14 +247,11 @@ class _FoodOrderStatusListState extends State<FoodOrderStatusList> {
                             builder: (context) => FoodWasteMain()),
                       );
                     },
-                    child: const Text(
-                      "Click here to see more reference",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.blue,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
+                    child: Text("see_more_reference".tr(),
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline)),
                   ),
                 ),
               ]
@@ -273,7 +265,9 @@ class _FoodOrderStatusListState extends State<FoodOrderStatusList> {
   @override
   Widget build(BuildContext context) {
     if (_orders.isEmpty) {
-      return const Center(child: Text("No Orders Found"));
+      return Center(
+        child: Text("no_orders_found".tr()),
+      );
     }
     return SingleChildScrollView(
       child: Column(
@@ -309,24 +303,29 @@ class _FoodOrderStatusListState extends State<FoodOrderStatusList> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             _buildStep(
-                                "Order Received",
-                                status['accepted'] == true,
-                                status['accepted'] == true),
+                              "order_received"
+                                  .tr(), // key name instead of hardcoded text
+                              status['accepted'] == true,
+                              status['accepted'] == true,
+                            ),
                             const SizedBox(width: 8),
                             _buildStep(
-                                "In Progress",
-                                status['in_progress'] == true,
-                                status['in_progress'] == true),
+                              "in_progress".tr(),
+                              status['in_progress'] == true,
+                              status['in_progress'] == true,
+                            ),
                             const SizedBox(width: 8),
                             _buildStep(
-                                "Almost Ready",
-                                status['almost_ready'] == true,
-                                status['almost_ready'] == true),
+                              "almost_ready".tr(),
+                              status['almost_ready'] == true,
+                              status['almost_ready'] == true,
+                            ),
                             const SizedBox(width: 8),
                             _buildStep(
-                                "Ready for Pickup",
-                                status['ready_for_pickup'] == true,
-                                status['ready_for_pickup'] == true),
+                              "ready_for_pickup".tr(),
+                              status['ready_for_pickup'] == true,
+                              status['ready_for_pickup'] == true,
+                            ),
                           ],
                         ),
                       ),

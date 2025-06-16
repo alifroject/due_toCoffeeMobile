@@ -7,6 +7,7 @@ import 'package:due_tocoffee/routes/screen_export.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
+import 'package:easy_localization/easy_localization.dart';
 
 class CoffeeShopHome extends StatefulWidget {
   const CoffeeShopHome({super.key});

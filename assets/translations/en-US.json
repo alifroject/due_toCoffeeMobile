@@ -3,5 +3,26 @@
   "my_order_payments": "My Order Payments",
   "settings": "Settings",
   "help_support": "Help & Support",
-  "logout": "Logout"
+  "logout": "Logout",
+  "cart_empty": "Cart is empty.",
+  "cancel": "Cancel",
+  "yes": "Yes",
+  "pay_now": "Pay Now",
+  "sure_delete": "Are you sure you want to delete this item?",
+  "cart": "Cart",
+  "my_food_orders": "My Food Orders",
+  "ongoing_todays_order": "Ongoing Order",
+  "history": "History",
+    "picked_up": "Picked Up",
+  "expired": "Expired",
+  "waste_food_overview": "Waste Food Overview",
+  "waste_food_paragraph": "The graph below visualizes waste food data based on picked up and expired orders. Expired represents uncollected orders that may contribute to potential food waste. You can explore more details about food waste trends, data analysis, and management efforts. For further insights, you can reference more...",
+  "see_more_reference": "Click here to see more reference",
+  "no_orders_found": "No Orders Found",
+  "order_received": "Order Received",
+  "in_progress": "In Progress",
+  "almost_ready": "Almost Ready",
+  "ready_for_pickup": "Ready for Pickup"
+
+  
 }

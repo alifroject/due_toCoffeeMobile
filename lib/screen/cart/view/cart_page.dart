@@ -3,6 +3,7 @@ import 'package:due_tocoffee/routes/screen_export.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ZigZagClipper extends CustomClipper<Path> {
   @override
@@ -41,13 +42,13 @@ class CartPage extends StatelessWidget {
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
         title: const Text(
-          'Cart',
+          "cart",
           style: TextStyle(
             fontFamily: 'Inika',
             color: Colors.white,
             fontSize: 22,
           ),
-        ),
+        ).tr(),
         backgroundColor: const Color(0xFF210F0F),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -67,7 +68,7 @@ class CartPage extends StatelessWidget {
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text('Cart is empty.'));
+            return Center(child: Text('cart_empty').tr());
           }
 
           final items = (snapshot.data!.docs.first.data()
@@ -96,8 +97,8 @@ class CartPage extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.zero,
                               ),
-                              content: const Text(
-                                "Are you sure you want to delete this item?",
+                              content: Text(
+                               "sure_delete".tr(),
                                 textAlign: TextAlign.center,
                               ),
                               actionsAlignment: MainAxisAlignment.spaceEvenly,
@@ -113,9 +114,11 @@ class CartPage extends StatelessWidget {
                                   ),
                                   onPressed: () =>
                                       Navigator.of(context).pop(false),
-                                  child: const Text("Cancel",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16)),
+                                  child: Text("cancel",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16))
+                                      .tr(),
                                 ),
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
@@ -128,9 +131,11 @@ class CartPage extends StatelessWidget {
                                   ),
                                   onPressed: () =>
                                       Navigator.of(context).pop(true),
-                                  child: const Text("Yes",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16)),
+                                  child: const Text("yes",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16))
+                                      .tr(),
                                 ),
                               ],
                             );
@@ -187,7 +192,7 @@ class CartPage extends StatelessWidget {
                             color: Colors.white,
                             fontFamily: 'Inika',
                           ),
-                        ),
+                        ).tr(),
                         Text(
                           NumberFormat.currency(
                             locale: 'id_ID',
@@ -221,7 +226,7 @@ class CartPage extends StatelessWidget {
                     final user = FirebaseAuth.instance.currentUser;
                     if (user == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('User not logged in')),
+                        SnackBar(content: Text('User not logged in').tr()),
                       );
                       return;
                     }
@@ -273,14 +278,14 @@ class CartPage extends StatelessWidget {
                     ),
                     minimumSize: const Size(double.infinity, 55),
                   ),
-                  child: const Text(
-                    'Pay Now',
+                  child: Text(
+                    'pay_now',
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: 'Inika',
                       color: Color(0xFFDAC5C5),
                     ),
-                  ),
+                  ).tr(),
                 ),
               ),
             ],

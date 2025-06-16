@@ -17,12 +17,14 @@ class LanguagePage extends StatelessWidget {
             title: const Text('English'),
             onTap: () async {
               await context.setLocale(const Locale('en', 'US'));
+              if (context.mounted) Navigator.pop(context);
             },
           ),
           ListTile(
             title: const Text('Bahasa Indonesia'),
             onTap: () async {
               await context.setLocale(const Locale('id', 'ID'));
+              if (context.mounted) Navigator.pop(context);
             },
           ),
         ],

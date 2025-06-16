@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'food_order_status_list.dart';
 import 'orderMutationPage.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class FoodOrderMainPage extends StatelessWidget {
   const FoodOrderMainPage({super.key});
@@ -17,13 +18,13 @@ class FoodOrderMainPage extends StatelessWidget {
               child: Column(
                 children: [
                   AppBar(
-                    title: const Text("My Food Orders"),
+                    title: Text("my_food_orders".tr()),
                     automaticallyImplyLeading: false,
                   ),
-                  const TabBar(
+                  TabBar(
                     tabs: [
-                      Tab(text: "Ongoing Today's Order"),
-                      Tab(text: "History"),
+                      Tab(text: "ongoing_todays_order".tr()),
+                      Tab(text: "history".tr()),
                     ],
                   ),
                 ],
