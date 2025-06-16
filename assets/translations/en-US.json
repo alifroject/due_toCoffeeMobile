@@ -13,7 +13,7 @@
   "my_food_orders": "My Food Orders",
   "ongoing_todays_order": "Ongoing Order",
   "history": "History",
-    "picked_up": "Picked Up",
+  "picked_up": "Picked Up",
   "expired": "Expired",
   "waste_food_overview": "Waste Food Overview",
   "waste_food_paragraph": "The graph below visualizes waste food data based on picked up and expired orders. Expired represents uncollected orders that may contribute to potential food waste. You can explore more details about food waste trends, data analysis, and management efforts. For further insights, you can reference more...",
@@ -22,7 +22,10 @@
   "order_received": "Order Received",
   "in_progress": "In Progress",
   "almost_ready": "Almost Ready",
-  "ready_for_pickup": "Ready for Pickup"
-
-  
+  "ready_for_pickup": "Ready for Pickup",
+  "select_date_range": "Select Date Range",
+  "both": "Both",
+  "no_transactions": "No transactions found.",
+  "order_id": "Order ID",
+  "status": "Status"
 }

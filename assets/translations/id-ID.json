@@ -22,5 +22,10 @@
   "order_received": "Pesanan Diterima",
   "in_progress": "Sedang Diproses",
   "almost_ready": "Hampir Siap",
-  "ready_for_pickup": "Siap Diambil"
+  "ready_for_pickup": "Siap Diambil",
+   "select_date_range": "Pilih Rentang Tanggal",
+  "both": "Keduanya",
+  "no_transactions": "Tidak ada transaksi ditemukan.",
+  "order_id": "ID Pesanan",
+  "status": "Status"
 }

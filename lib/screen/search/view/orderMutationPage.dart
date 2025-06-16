@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HistoryMutationPage extends StatefulWidget {
   const HistoryMutationPage({super.key});
@@ -55,7 +56,8 @@ class _HistoryMutationPageState extends State<HistoryMutationPage> {
         .where('status', isEqualTo: 'paid');
 
     final snapshot = await query.get();
-    final docs = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    final docs =
+        snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
 
     List<Map<String, dynamic>> filtered = docs.where((doc) {
       final queueStatus = doc['queue_number_status'] ?? '';
@@ -123,7 +125,8 @@ class _HistoryMutationPageState extends State<HistoryMutationPage> {
                         child: GestureDetector(
                           onTap: _pickDateRange,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 14),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(12),
@@ -137,14 +140,16 @@ class _HistoryMutationPageState extends State<HistoryMutationPage> {
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.calendar_today, size: 20, color: Colors.blue),
+                                const Icon(Icons.calendar_today,
+                                    size: 20, color: Colors.blue),
                                 const SizedBox(width: 10),
                                 Expanded(
                                   child: Text(
                                     fromDate != null && toDate != null
                                         ? "${DateFormat('yyyy-MM-dd').format(fromDate!)} - ${DateFormat('yyyy-MM-dd').format(toDate!)}"
-                                        : "Select Date Range",
-                                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                                        : "select_date_range".tr(),
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.black87),
                                   ),
                                 ),
                               ],
@@ -173,10 +178,15 @@ class _HistoryMutationPageState extends State<HistoryMutationPage> {
                             value: statusFilter,
                             underline: Container(),
                             isExpanded: true,
-                            items: const [
-                              DropdownMenuItem(value: 'both', child: Text("Both")),
-                              DropdownMenuItem(value: 'picked up', child: Text("Picked Up")),
-                              DropdownMenuItem(value: 'expired', child: Text("Expired")),
+                            items: [
+                              DropdownMenuItem(
+                                  value: 'both', child: Text("both".tr())),
+                              DropdownMenuItem(
+                                  value: 'picked up',
+                                  child: Text("picked_up".tr())),
+                              DropdownMenuItem(
+                                  value: 'expired',
+                                  child: Text("expired".tr())),
                             ],
                             onChanged: (value) {
                               setState(() {
@@ -198,13 +208,14 @@ class _HistoryMutationPageState extends State<HistoryMutationPage> {
           // Result List
           Expanded(
             child: _transactions.isEmpty
-                ? const Center(child: Text("No transactions found."))
+                ? Center(child: Text("No transactions found.".tr()))
                 : ListView.builder(
                     itemCount: _transactions.length,
                     itemBuilder: (context, index) {
                       final txn = _transactions[index];
                       return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15),
@@ -224,11 +235,13 @@ class _HistoryMutationPageState extends State<HistoryMutationPage> {
                               color: Colors.blueAccent.withOpacity(0.2),
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(Icons.receipt_long, color: Colors.blueAccent, size: 28),
+                            child: const Icon(Icons.receipt_long,
+                                color: Colors.blueAccent, size: 28),
                           ),
                           title: Text(
                             "Order ID: ${txn['order_id'] ?? '-'}",
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           subtitle: Padding(
                             padding: const EdgeInsets.only(top: 6),
